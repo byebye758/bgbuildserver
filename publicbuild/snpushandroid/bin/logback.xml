@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+	<property name="logbase" value="/var/log/scinan/snpushandroid" />
+	<property name="reserved" value="60" />
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%-5level] %d{ISO8601} [%C{0}:%M] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="DEBUGINFO"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logbase}/debug.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logbase}/debug/debug.%d{yyyyMMdd}.log</fileNamePattern>
+			<MaxHistory>${reserved}</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				[%-5level] %d{ISO8601} [%C{0}:%M] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<appender name="SYSTEMINFO"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logbase}/system.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logbase}/system/system.%d{yyyyMMdd}.log</fileNamePattern>
+			<MaxHistory>${reserved}</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				[%-5level] %d{ISO8601} [%C{0}:%M] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<appender name="ERRORINFO"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logbase}/error.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logbase}/error/error.%d{yyyyMMdd}.log</fileNamePattern>
+			<MaxHistory>${reserved}</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>
+				[%-5level] %d{ISO8601} [%C{0}:%M line:%L] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<appender name="SPECIALINFO"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logbase}/special.log</file>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+		    <onMatch>ACCEPT</onMatch>
+		    <onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>${logbase}/special/special.log.%i.bak</fileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>20</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<pattern>
+				[%-5level] %d{ISO8601} [%C{0}:%M line:%L] - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="DEBUGINFO" />
+		<appender-ref ref="ERRORINFO" />
+	</root>
+</configuration>
