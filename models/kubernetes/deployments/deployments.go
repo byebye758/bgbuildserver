@@ -13,6 +13,20 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+var (
+	Clientset *kubernetes.Clientset
+	err       error
+)
+
+type De struct {
+	Kind        string
+	APIVersion  string
+	Name        string
+	Namespace   string
+	Labels      map[string]string
+	MatchLabels map[string]string
+}
+
 func init() {
 	kubeconfigpath = beego.AppPath + "/conf/kubeconfig"
 	ubeconfig := flag.String("kubeconfig", kubeconfigpath, "absolute path to the kubeconfig file")
@@ -22,8 +36,13 @@ func init() {
 		panic(err.Error())
 	}
 	// creates the clientset
-	Clientset, err := kubernetes.NewForConfig(config)
+	Clientset, err = kubernetes.NewForConfig(config)
 	if err != nil {
 		panic(err.Error())
 	}
+
+}
+func Create() {
+	Clientset.Deployments("default").Create()
+
 }
